@@ -29,6 +29,7 @@ export var Fit;
     Fit["FitHeight"] = "fitHeight";
     Fit["None"] = "none";
     Fit["ScaleDown"] = "scaleDown";
+    Fit["Layout"] = "layout";
 })(Fit || (Fit = {}));
 // Alignment options for the canvas
 export var Alignment;

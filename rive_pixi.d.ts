@@ -7,7 +7,8 @@ export declare enum Fit {
     FitWidth = "fitWidth",
     FitHeight = "fitHeight",
     None = "none",
-    ScaleDown = "scaleDown"
+    ScaleDown = "scaleDown",
+    Layout = "layout"
 }
 export declare enum Alignment {
     Center = "center",
