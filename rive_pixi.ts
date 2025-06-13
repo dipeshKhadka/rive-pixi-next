@@ -2,12 +2,12 @@ import {
   Assets,
   Sprite,
   Texture,
-  settings,
   extensions,
   checkExtension,
   ExtensionType,
   LoaderParserPriority,
 } from "pixi.js";
+import { settings } from "@pixi/settings";
 import Rive, {
   Artboard,
   File,
@@ -67,7 +67,8 @@ export enum Alignment {
  * You can change wasm path by calling "setWasmPath" function
  * before creating RiveSprite instances!
  */
-var WASM_PATH = "https://unpkg.com/@rive-app/canvas-advanced-single@2.7.3/rive.wasm";
+var WASM_PATH =
+  "https://unpkg.com/@rive-app/canvas-advanced-single@2.7.3/rive.wasm";
 const riveApp = Rive({ locateFile: () => WASM_PATH });
 export function setWasmPath(path: string): void {
   WASM_PATH = path;

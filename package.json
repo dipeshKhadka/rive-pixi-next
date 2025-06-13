@@ -1,6 +1,6 @@
 {
-  "name": "rive-pixi",
-  "version": "0.1.0",
+  "name": "rive-pixi-next",
+  "version": "0.1.1",
   "description": "Rive runtime for PixiJS ",
   "main": "rive_pixi.js",
   "types": "rive_pixi.d.ts",
@@ -8,13 +8,17 @@
     "pixijs",
     "rive"
   ],
-  "author": "Yogesh Bhandari <develop.yogesh@gmail.com>",
+  "author": "dipeshKhadka",
+  "contributors": [
+    "afrankenstine"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
-    "@rive-app/canvas-advanced-single": "^2.9.1",
+    "@pixi/settings": "^7.4.3",
+    "@rive-app/canvas-advanced-single": "^2.30.0",
     "pixi.js": "^8.9.1"
   },
   "devDependencies": {
