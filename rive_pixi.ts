@@ -47,6 +47,7 @@ export enum Fit {
   FitHeight = "fitHeight",
   None = "none",
   ScaleDown = "scaleDown",
+  Layout = "layout",
 }
 
 // Alignment options for the canvas
