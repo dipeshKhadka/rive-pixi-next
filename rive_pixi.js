@@ -49,7 +49,7 @@ export var Alignment;
  * You can change wasm path by calling "setWasmPath" function
  * before creating RiveSprite instances!
  */
-var WASM_PATH = "https://unpkg.com/@rive-app/canvas-advanced-single@2.7.3/rive.wasm";
+var WASM_PATH = "https://unpkg.com/@rive-app/canvas-advanced-single@2.30.0/rive.wasm";
 const riveApp = Rive({ locateFile: () => WASM_PATH });
 export function setWasmPath(path) {
     WASM_PATH = path;
@@ -419,22 +419,45 @@ export class RiveSprite extends Sprite {
      * Artboard should be loaded before
      */
     updateSize() {
-        if (this.artboard && this._rive && this._renderer) {
-            const bounds = this.artboard.bounds;
-            const { minX, minY, maxX, maxY } = bounds;
-            const width = maxX - minX;
-            const height = maxY - minY;
-            const maxWidth = this.maxWidth || width;
-            const maxHeight = this.maxHeight || height;
+        if (!this.artboard || !this._rive || !this._renderer)
+            return;
+        const { minX, minY, maxX, maxY } = this.artboard.bounds;
+        const artW = maxX - minX;
+        const artH = maxY - minY;
+        const maxW = this.maxWidth || artW;
+        const maxH = this.maxHeight || artH;
+        const frame = { minX: 0, minY: 0, maxX: maxW, maxY: maxH };
+        // ───────────────────────────────────────────────
+        // NEW: handle the extra enum value ourselves
+        // ───────────────────────────────────────────────
+        if (this.fit === Fit.Layout) {
+            // 1. work out a single uniform scale that keeps aspect‑ratio
+            const scale = Math.min(maxW / artW, maxH / artH);
+            // 2. build a transform matrix (Mat2D)
+            const m = new this._rive.Mat2D();
+            m.xx = scale; // scale X
+            m.yy = scale; // scale Y
+            m.tx = (maxW - artW * scale) * 0.5; // center horizontally
+            m.ty = (maxH - artH * scale) * 0.5; // center vertically
+            this._aligned = m; // store for hit‑tests etc.
+            // 3. tell the renderer to use that matrix
+            this._renderer.save();
+            this._renderer.align(this._rive.Fit.contain, // any fit, we override with matrix
+            this._rive.Alignment.center, // any alignment
+            frame, this.artboard.bounds);
+            this._renderer.restore();
+        }
+        else {
+            // old path (unchanged)
             const fit = this._rive.Fit[this.fit];
             const align = this._rive.Alignment[this.align];
-            const frame = { minX: 0, minY: 0, maxX: maxWidth, maxY: maxHeight };
-            this._aligned = this._rive?.computeAlignment(fit, align, frame, bounds);
-            this._renderer.align(fit, align, frame, bounds);
-            this._canvas.width = maxWidth;
-            this._canvas.height = maxHeight;
-            this.texture.update();
+            this._aligned = this._rive.computeAlignment(fit, align, frame, this.artboard.bounds);
+            this._renderer.align(fit, align, frame, this.artboard.bounds);
         }
+        // update canvas size & Pixi texture
+        this._canvas.width = maxW;
+        this._canvas.height = maxH;
+        this.texture.update();
     }
     /**
      * Convert global Pixi.js coordinates to Rive point coordinates
