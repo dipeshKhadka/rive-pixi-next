@@ -19,7 +19,7 @@
   "dependencies": {
     "@pixi/settings": "^7.4.3",
     "@rive-app/canvas-advanced-single": "^2.30.0",
-    "pixi.js": "^8.9.1"
+    "pixi.js": "^7.4.2"
   },
   "devDependencies": {
     "typescript": "^5.2.2"
